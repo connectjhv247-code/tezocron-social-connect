@@ -16,28 +16,32 @@ import { db, auth, storage, handleFirestoreError, OperationType } from '../fireb
 import { UserProfile, UserPrivacySettings } from '../types';
 
 /**
- * Uploads a profile picture file directly to Firebase Storage and returns its secure download URL.
+ * Optimises a gallery photo and stores it, returning its permanent secure URL.
+ * Identical pictures are reused instead of being uploaded again.
  */
 export async function uploadProfilePictureToStorage(
   userId: string,
   file: File
 ): Promise<string> {
   if (!userId || !file) {
-    throw new Error('User ID and image file are required for uploading profile picture.');
+    throw new Error('Please choose a photo to use as your profile picture.');
   }
 
-  const cleanFileName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
-  const path = `profile_pictures/${userId}_${Date.now()}_${cleanFileName}`;
-  const pictureRef = storageRef(storage, path);
+  const { blob, contentType, hash } = await prepareProfileImage(file);
+  const pictureRef = storageRef(storage, `profile_pictures/${userId}/${hash}.jpg`);
 
+  // Reuse the exact same picture if it was already uploaded before
   try {
-    const uploadTask = await uploadBytes(pictureRef, file);
-    const downloadUrl = await getDownloadURL(uploadTask.ref);
-    return downloadUrl;
-  } catch (error) {
-    console.error('Firebase Storage profile picture upload error:', error);
-    throw error;
+    return await getDownloadURL(pictureRef);
+  } catch {
+    // Not stored yet — continue with the upload
   }
+
+  const uploadTask = await uploadBytes(pictureRef, blob, {
+    contentType,
+    cacheControl: 'public, max-age=31536000, immutable',
+  });
+  return getDownloadURL(uploadTask.ref);
 }
 
 /**
