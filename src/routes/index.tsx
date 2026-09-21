@@ -1,24 +1,56 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { Suspense, lazy, useEffect, useState } from "react";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
+import { registerServiceWorker } from "@/lib/pwa";
+
+const TezocronApp = lazy(() => import("@/tezocron/App"));
+
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "TEZOCRON — Social Crypto Chat & Community" },
+      {
+        name: "description",
+        content:
+          "TEZOCRON is a real-time social crypto app: community chat, direct messages, connections and notifications in one installable app.",
+      },
+      { property: "og:title", content: "TEZOCRON — Social Crypto Chat & Community" },
+      {
+        property: "og:description",
+        content:
+          "Join the TEZOCRON community: real-time chat, direct messages and connections in one installable social crypto app.",
+      },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
-function Index() {
+function Splash() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
+    <div className="flex min-h-screen items-center justify-center bg-[#020817]">
+      <div className="flex flex-col items-center gap-4">
+        <img src="/icon-192.png" alt="TEZOCRON" className="h-20 w-20 animate-pulse rounded-2xl" />
+        <p className="text-sm tracking-[0.3em] text-[#7c3aed]">TEZOCRON</p>
+      </div>
     </div>
+  );
+}
+
+function Index() {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    registerServiceWorker();
+  }, []);
+
+  if (!mounted) return <Splash />;
+
+  return (
+    <Suspense fallback={<Splash />}>
+      <TezocronApp />
+    </Suspense>
   );
 }
