@@ -26,7 +26,7 @@ import {
   Check,
   Globe
 } from 'lucide-react';
-import firebaseConfig from '../firebase-applet-config.json';
+import firebaseConfig from './firebase-config.json';
 
 interface AuthViewProps {
   onSuccess?: () => void;
