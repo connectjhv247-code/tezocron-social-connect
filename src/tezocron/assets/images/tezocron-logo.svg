@@ -1,0 +1,237 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" width="1000" height="1000">
+  <defs>
+    <!-- Background subtle radial ambient glow -->
+    <radialGradient id="bgGlow" cx="50%" cy="48%" r="50%">
+      <stop offset="0%" stop-color="#0c1840" stop-opacity="0.9"/>
+      <stop offset="45%" stop-color="#070e28" stop-opacity="0.8"/>
+      <stop offset="85%" stop-color="#040616" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#030412" stop-opacity="1"/>
+    </radialGradient>
+
+    <!-- Cyan to Blue gradient for left wings and T-bar -->
+    <linearGradient id="cyanBlueGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00e5ff"/>
+      <stop offset="45%" stop-color="#00a8ff"/>
+      <stop offset="100%" stop-color="#0072ff"/>
+    </linearGradient>
+
+    <!-- Neon Pink to Magenta gradient for right wings -->
+    <linearGradient id="magentaPinkGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#4e54c8"/>
+      <stop offset="25%" stop-color="#8038ff"/>
+      <stop offset="70%" stop-color="#e020c0"/>
+      <stop offset="100%" stop-color="#ff33aa"/>
+    </linearGradient>
+
+    <!-- Vertical Stem gradient (Cyan top -> Azure -> Violet -> Vibrant Pink bottom) -->
+    <linearGradient id="stemGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0080ff"/>
+      <stop offset="35%" stop-color="#0088ff"/>
+      <stop offset="60%" stop-color="#3d52f5"/>
+      <stop offset="80%" stop-color="#8a30f0"/>
+      <stop offset="100%" stop-color="#d936e3"/>
+    </linearGradient>
+
+    <!-- Stem horizontal highlight gradient to match left top bar -->
+    <linearGradient id="stemHorizGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#008cff"/>
+      <stop offset="50%" stop-color="#1f70ff"/>
+      <stop offset="100%" stop-color="#5544f8"/>
+    </linearGradient>
+
+    <!-- Subtle 3D Top Bevel Highlight for Blue Shapes -->
+    <linearGradient id="bevelLightBlue" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.35"/>
+      <stop offset="30%" stop-color="#ffffff" stop-opacity="0.05"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.25"/>
+    </linearGradient>
+
+    <!-- Subtle 3D Top Bevel Highlight for Pink Shapes -->
+    <linearGradient id="bevelLightPink" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.35"/>
+      <stop offset="30%" stop-color="#ffffff" stop-opacity="0.05"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.25"/>
+    </linearGradient>
+
+    <!-- Outer Cyan Glow Filter -->
+    <filter id="cyanGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="22" result="blur1"/>
+      <feGaussianBlur stdDeviation="40" result="blur2"/>
+      <feMerge>
+        <feMergeNode in="blur2"/>
+        <feMergeNode in="blur1"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Outer Pink Glow Filter -->
+    <filter id="pinkGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="22" result="blur1"/>
+      <feGaussianBlur stdDeviation="40" result="blur2"/>
+      <feMerge>
+        <feMergeNode in="blur2"/>
+        <feMergeNode in="blur1"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Overall Soft Neon Ambience -->
+    <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="15" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1000" height="1000" fill="url(#bgGlow)"/>
+
+  <!-- ================= GLOW PASS (Behind Emblem) ================= -->
+  <g opacity="0.65">
+    <!-- Left glow shapes (Cyan) -->
+    <!-- Middle Left Wing Glow -->
+    <rect x="165" y="375" width="269" height="56" rx="28" fill="#00d8ff" filter="url(#cyanGlow)" opacity="0.6"/>
+    <!-- Bottom Left Wing Glow -->
+    <path d="M 235 454 L 434 454 Q 434 454 434 454 L 434 510 L 290 510 L 235 454 Z" fill="#00a8ff" filter="url(#cyanGlow)" opacity="0.5"/>
+
+    <!-- Right glow shapes (Pink) -->
+    <!-- Top Right Bar Glow -->
+    <rect x="566" y="280" width="340" height="72" rx="36" fill="#e020c0" filter="url(#pinkGlow)" opacity="0.6"/>
+    <!-- Middle Right Wing Glow -->
+    <rect x="566" y="375" width="269" height="56" rx="28" fill="#e020c0" filter="url(#pinkGlow)" opacity="0.6"/>
+    <!-- Bottom Right Wing Glow -->
+    <path d="M 566 454 L 765 454 L 710 510 L 566 510 Z" fill="#ff2da0" filter="url(#pinkGlow)" opacity="0.5"/>
+
+    <!-- Center T & Stem Glow -->
+    <!-- Top-Left Bar Glow -->
+    <rect x="95" y="280" width="447" height="72" rx="36" fill="#00c8ff" filter="url(#cyanGlow)" opacity="0.6"/>
+    <!-- Stem Glow -->
+    <path d="M 454 280 L 542 280 L 542 715 L 500 766 L 454 715 Z" fill="#7928ca" filter="url(#pinkGlow)" opacity="0.6"/>
+  </g>
+
+  <!-- ================= SHARP SOLID VECTORS ================= -->
+
+  <!-- 1. LEFT MIDDLE WING -->
+  <!-- Starts at 165, ends at 434 (length = 269), height = 56 -->
+  <g>
+    <rect x="165" y="375" width="269" height="56" rx="26" fill="url(#cyanBlueGrad)"/>
+    <rect x="165" y="375" width="269" height="56" rx="26" fill="url(#bevelLightBlue)"/>
+  </g>
+
+  <!-- 2. LEFT BOTTOM WING -->
+  <!-- Starts at 235, ends at 434 (length = 199), height = 56. Chamfered bottom-left -->
+  <g>
+    <!-- Path with rounded corners and angled outer tip -->
+    <path d="
+      M 260 454
+      L 420 454
+      A 14 14 0 0 1 434 468
+      L 434 496
+      A 14 14 0 0 1 420 510
+      L 300 510
+      A 16 16 0 0 1 288 505
+      L 242 468
+      A 16 16 0 0 1 245 456
+      A 16 16 0 0 1 260 454 Z"
+      fill="url(#cyanBlueGrad)"/>
+    <path d="
+      M 260 454
+      L 420 454
+      A 14 14 0 0 1 434 468
+      L 434 496
+      A 14 14 0 0 1 420 510
+      L 300 510
+      A 16 16 0 0 1 288 505
+      L 242 468
+      A 16 16 0 0 1 245 456
+      A 16 16 0 0 1 260 454 Z"
+      fill="url(#bevelLightBlue)"/>
+  </g>
+
+  <!-- 3. RIGHT TOP BAR (Detached Horizontal Arm) -->
+  <!-- Inner at 566, outer at 906 (width = 340), height = 72 -->
+  <g>
+    <rect x="566" y="280" width="340" height="72" rx="34" fill="url(#magentaPinkGrad)"/>
+    <rect x="566" y="280" width="340" height="72" rx="34" fill="url(#bevelLightPink)"/>
+  </g>
+
+  <!-- 4. RIGHT MIDDLE WING -->
+  <!-- Inner at 566, outer at 835 (width = 269), height = 56 -->
+  <g>
+    <rect x="566" y="375" width="269" height="56" rx="26" fill="url(#magentaPinkGrad)"/>
+    <rect x="566" y="375" width="269" height="56" rx="26" fill="url(#bevelLightPink)"/>
+  </g>
+
+  <!-- 5. RIGHT BOTTOM WING -->
+  <!-- Inner at 566, outer at 765 (width = 199), height = 56. Chamfered bottom-right -->
+  <g>
+    <path d="
+      M 580 454
+      L 740 454
+      A 16 16 0 0 1 755 456
+      A 16 16 0 0 1 758 468
+      L 712 505
+      A 16 16 0 0 1 700 510
+      L 580 510
+      A 14 14 0 0 1 566 496
+      L 566 468
+      A 14 14 0 0 1 580 454 Z"
+      fill="url(#magentaPinkGrad)"/>
+    <path d="
+      M 580 454
+      L 740 454
+      A 16 16 0 0 1 755 456
+      A 16 16 0 0 1 758 468
+      L 712 505
+      A 16 16 0 0 1 700 510
+      L 580 510
+      A 14 14 0 0 1 566 496
+      L 566 468
+      A 14 14 0 0 1 580 454 Z"
+      fill="url(#bevelLightPink)"/>
+  </g>
+
+  <!-- 6. CORE UNIFIED T-SHAPE: Top-Left Bar + Central Vertical Stem -->
+  <!--
+    Left top arm: starts at x=94, height=72 (y=280 to 352).
+    Stem: x=454 to 542 (width=88).
+    Stem vertical: y=280 down to y=715, then tapers at 45 deg to (500, 766).
+    Right edge of stem is a straight vertical line from (542, 280) down to (542, 715).
+  -->
+  <g>
+    <path d="
+      M 130 280
+      L 530 280
+      A 12 12 0 0 1 542 292
+      L 542 715
+      A 8 8 0 0 1 539 722
+      L 505 765
+      A 7 7 0 0 1 495 765
+      L 461 722
+      A 8 8 0 0 1 458 715
+      L 458 360
+      A 8 8 0 0 1 450 352
+      L 130 352
+      A 36 36 0 0 1 94 316
+      A 36 36 0 0 1 130 280 Z"
+      fill="url(#stemGrad)"/>
+    <path d="
+      M 130 280
+      L 530 280
+      A 12 12 0 0 1 542 292
+      L 542 715
+      A 8 8 0 0 1 539 722
+      L 505 765
+      A 7 7 0 0 1 495 765
+      L 461 722
+      A 8 8 0 0 1 458 715
+      L 458 360
+      A 8 8 0 0 1 450 352
+      L 130 352
+      A 36 36 0 0 1 94 316
+      A 36 36 0 0 1 130 280 Z"
+      fill="url(#bevelLightBlue)"/>
+  </g>
+</svg>
