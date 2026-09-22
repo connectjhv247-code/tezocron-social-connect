@@ -252,6 +252,15 @@ export default function App({ relateHandle }: AppProps = {}) {
 
   return (
     <div className="min-h-screen bg-[#fafafa] dark:bg-[#0c0c0e] text-zinc-900 dark:text-zinc-100 flex flex-col font-sans antialiased selection:bg-pink-500 selection:text-white">
+
+      {relateHandle && (relateLinkStatus === 'notfound' || relateLinkStatus === 'self') && (
+        <div className="fixed top-16 left-1/2 -translate-x-1/2 z-50 px-4 py-2.5 rounded-2xl bg-zinc-900 text-white text-xs font-bold shadow-xl border border-zinc-700 max-w-[92vw] text-center">
+          {relateLinkStatus === 'self'
+            ? 'This is your own Relate Link — share it with others to connect.'
+            : 'This Relate Link is no longer available.'}
+        </div>
+      )}
+      
       
       {/* Top Navigation Bar with TEZOCRON blue, white, and pink system */}
       <header className="sticky top-0 z-40 bg-white/90 dark:bg-zinc-900/90 backdrop-blur-md border-b border-zinc-200/80 dark:border-zinc-800">
