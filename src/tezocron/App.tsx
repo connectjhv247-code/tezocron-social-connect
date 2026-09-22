@@ -174,6 +174,40 @@ export default function App({ relateHandle }: AppProps = {}) {
     return () => unsubscribe();
   }, []);
 
+  // Make sure every signed-in member has their own shareable Relate Link
+  useEffect(() => {
+    if (!currentUser?.uid) return;
+    ensureRelateHandle(currentUser.uid, currentUser.displayName || undefined);
+  }, [currentUser?.uid]);
+
+  // Open a shared Relate Link: resolve it to the real member profile
+  useEffect(() => {
+    if (!relateHandle || !currentUser?.uid || relateLinkStatus === 'done') return;
+    let active = true;
+    setRelateLinkStatus('resolving');
+
+    resolveRelateHandle(relateHandle).then((target) => {
+      if (!active) return;
+      if (!target) {
+        setRelateLinkStatus('notfound');
+        return;
+      }
+      if (target.uid === currentUser.uid) {
+        setActiveTab('relate');
+        setRelateLinkStatus('self');
+        return;
+      }
+      setActiveTab('relate');
+      setProfileModalUserId(target.uid);
+      setRelateLinkStatus('done');
+    });
+
+    return () => {
+      active = false;
+    };
+  }, [relateHandle, currentUser?.uid, relateLinkStatus]);
+
+
   const handleSignOut = async () => {
     try {
       await signOut(auth);
