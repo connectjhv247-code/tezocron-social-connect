@@ -16,6 +16,7 @@ import { TermsOfServiceView } from './components/TermsOfServiceView';
 import { FAQSupportView } from './components/FAQSupportView';
 import { NotificationsView } from './components/NotificationsView';
 import { PageTransition, modalZoomVariants, backdropVariants } from './components/PageTransition';
+import { ensureRelateHandle, resolveRelateHandle } from './lib/relateLinkService';
 import { 
   MessageSquare, 
   HeartHandshake, 
@@ -38,8 +39,16 @@ import {
 
 type MainNavTab = 'social_chat' | 'relate' | 'dm' | 'notifications' | 'settings' | 'privacy' | 'terms' | 'faq';
 
-export default function App() {
+interface AppProps {
+  /** Public Relate handle from a shared Relate Link (/r/<handle>) */
+  relateHandle?: string;
+}
+
+export default function App({ relateHandle }: AppProps = {}) {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [relateLinkStatus, setRelateLinkStatus] = useState<'idle' | 'resolving' | 'notfound' | 'self' | 'done'>(
+    relateHandle ? 'resolving' : 'idle'
+  );
   const [userProfile, setUserProfile] = useState<{ displayName?: string; role?: string } | null>(null);
   const [authLoading, setAuthLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<MainNavTab>('social_chat');
@@ -165,6 +174,40 @@ export default function App() {
     return () => unsubscribe();
   }, []);
 
+  // Make sure every signed-in member has their own shareable Relate Link
+  useEffect(() => {
+    if (!currentUser?.uid) return;
+    ensureRelateHandle(currentUser.uid, currentUser.displayName || undefined);
+  }, [currentUser?.uid]);
+
+  // Open a shared Relate Link: resolve it to the real member profile
+  useEffect(() => {
+    if (!relateHandle || !currentUser?.uid || relateLinkStatus === 'done') return;
+    let active = true;
+    setRelateLinkStatus('resolving');
+
+    resolveRelateHandle(relateHandle).then((target) => {
+      if (!active) return;
+      if (!target) {
+        setRelateLinkStatus('notfound');
+        return;
+      }
+      if (target.uid === currentUser.uid) {
+        setActiveTab('relate');
+        setRelateLinkStatus('self');
+        return;
+      }
+      setActiveTab('relate');
+      setProfileModalUserId(target.uid);
+      setRelateLinkStatus('done');
+    });
+
+    return () => {
+      active = false;
+    };
+  }, [relateHandle, currentUser?.uid, relateLinkStatus]);
+
+
   const handleSignOut = async () => {
     try {
       await signOut(auth);
@@ -184,6 +227,16 @@ export default function App() {
     return (
       <div className="min-h-screen bg-gradient-to-b from-blue-50/40 via-white to-pink-50/30 dark:from-zinc-950 dark:via-zinc-900 dark:to-zinc-950 flex flex-col justify-center items-center p-4 sm:p-6">
         <div className="w-full max-w-md my-auto">
+          {relateHandle && (
+            <div className="mb-3 p-3.5 rounded-2xl bg-white/90 dark:bg-zinc-900/90 border border-blue-200/70 dark:border-zinc-800 shadow-xs text-center">
+              <p className="text-xs font-bold text-zinc-800 dark:text-zinc-100">
+                You opened a TEZOCRON Relate Link
+              </p>
+              <p className="text-[11px] text-zinc-500 dark:text-zinc-400 mt-1">
+                Sign in or create your account to view this member's profile and relate with them.
+              </p>
+            </div>
+          )}
           <AuthView onSuccess={() => {
             // Callback triggers state update via onAuthStateChanged
           }} />
@@ -199,6 +252,15 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-[#fafafa] dark:bg-[#0c0c0e] text-zinc-900 dark:text-zinc-100 flex flex-col font-sans antialiased selection:bg-pink-500 selection:text-white">
+
+      {relateHandle && (relateLinkStatus === 'notfound' || relateLinkStatus === 'self') && (
+        <div className="fixed top-16 left-1/2 -translate-x-1/2 z-50 px-4 py-2.5 rounded-2xl bg-zinc-900 text-white text-xs font-bold shadow-xl border border-zinc-700 max-w-[92vw] text-center">
+          {relateLinkStatus === 'self'
+            ? 'This is your own Relate Link — share it with others to connect.'
+            : 'This Relate Link is no longer available.'}
+        </div>
+      )}
+      
       
       {/* Top Navigation Bar with TEZOCRON blue, white, and pink system */}
       <header className="sticky top-0 z-40 bg-white/90 dark:bg-zinc-900/90 backdrop-blur-md border-b border-zinc-200/80 dark:border-zinc-800">

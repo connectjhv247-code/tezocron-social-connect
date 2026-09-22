@@ -14,6 +14,7 @@ import { updateProfile } from 'firebase/auth';
 import { ref as storageRef, uploadString, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { db, auth, storage, handleFirestoreError, OperationType } from '../firebase';
 import { UserProfile, UserPrivacySettings } from '../types';
+import { prepareProfileImage } from './imageUtils';
 
 /**
  * Optimises a gallery photo and stores it, returning its permanent secure URL.

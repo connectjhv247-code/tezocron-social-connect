@@ -13,6 +13,8 @@ export interface UserProfile {
   location?: string;
   createdAt: string;
   role: string;
+  /** Public shareable Relate Link handle (never an internal identifier) */
+  relateHandle?: string;
   privacySettings?: UserPrivacySettings;
 }
 
