@@ -38,8 +38,16 @@ import {
 
 type MainNavTab = 'social_chat' | 'relate' | 'dm' | 'notifications' | 'settings' | 'privacy' | 'terms' | 'faq';
 
-export default function App() {
+interface AppProps {
+  /** Public Relate handle from a shared Relate Link (/r/<handle>) */
+  relateHandle?: string;
+}
+
+export default function App({ relateHandle }: AppProps = {}) {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [relateLinkStatus, setRelateLinkStatus] = useState<'idle' | 'resolving' | 'notfound' | 'self' | 'done'>(
+    relateHandle ? 'resolving' : 'idle'
+  );
   const [userProfile, setUserProfile] = useState<{ displayName?: string; role?: string } | null>(null);
   const [authLoading, setAuthLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<MainNavTab>('social_chat');
