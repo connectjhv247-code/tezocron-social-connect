@@ -16,6 +16,7 @@ import { TermsOfServiceView } from './components/TermsOfServiceView';
 import { FAQSupportView } from './components/FAQSupportView';
 import { NotificationsView } from './components/NotificationsView';
 import { PageTransition, modalZoomVariants, backdropVariants } from './components/PageTransition';
+import { ensureRelateHandle, resolveRelateHandle } from './lib/relateLinkService';
 import { 
   MessageSquare, 
   HeartHandshake, 
