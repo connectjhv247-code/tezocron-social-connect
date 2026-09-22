@@ -7,6 +7,9 @@
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
+  "launch_handler": { "client_mode": "navigate-existing" },
+  "capture_links": "existing-client-navigate",
+  "handle_links": "preferred",
   "background_color": "#020817",
   "theme_color": "#7c3aed",
   "icons": [
