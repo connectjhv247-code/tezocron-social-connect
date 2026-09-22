@@ -227,6 +227,16 @@ export default function App({ relateHandle }: AppProps = {}) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-blue-50/40 via-white to-pink-50/30 dark:from-zinc-950 dark:via-zinc-900 dark:to-zinc-950 flex flex-col justify-center items-center p-4 sm:p-6">
         <div className="w-full max-w-md my-auto">
+          {relateHandle && (
+            <div className="mb-3 p-3.5 rounded-2xl bg-white/90 dark:bg-zinc-900/90 border border-blue-200/70 dark:border-zinc-800 shadow-xs text-center">
+              <p className="text-xs font-bold text-zinc-800 dark:text-zinc-100">
+                You opened a TEZOCRON Relate Link
+              </p>
+              <p className="text-[11px] text-zinc-500 dark:text-zinc-400 mt-1">
+                Sign in or create your account to view this member's profile and relate with them.
+              </p>
+            </div>
+          )}
           <AuthView onSuccess={() => {
             // Callback triggers state update via onAuthStateChanged
           }} />
