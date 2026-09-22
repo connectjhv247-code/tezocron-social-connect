@@ -12,6 +12,7 @@ import { db, auth, handleFirestoreError, OperationType } from '../firebase';
 import { UserProfile, Relationship } from '../types';
 import { sendNotification } from '../lib/notificationService';
 import { subscribeToUserBlocks } from '../lib/blockService';
+import { RelateLinkCard } from './RelateLinkCard';
 import { 
   HeartHandshake, 
   Search, 
