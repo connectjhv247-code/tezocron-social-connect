@@ -308,6 +308,11 @@ export const RelateView: React.FC<RelateViewProps> = ({
 
   return (
     <div className="space-y-4 max-w-5xl mx-auto">
+
+      {currentUserId && (
+        <RelateLinkCard currentUserId={currentUserId} currentUserName={currentUserName} />
+      )}
+      
       
       {/* Header Banner with TEZOCRON Blue, White, and Pink Identity */}
       <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-blue-600/10 via-pink-500/10 to-transparent border border-blue-100/80 dark:border-zinc-800 flex flex-col md:flex-row md:items-center justify-between gap-3 shadow-xs">
