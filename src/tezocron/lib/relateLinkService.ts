@@ -115,13 +115,12 @@ export async function resolveRelateHandle(handle: string): Promise<{
   }
 }
 
+/** Public website that hosts TEZOCRON Relate Links. */
+export const RELATE_LINK_BASE = 'https://tezocron.com';
+
 /** Builds the full public Relate Link for sharing outside the app. */
 export function buildRelateLink(handle: string): string {
-  const origin =
-    typeof window !== 'undefined' && window.location?.origin
-      ? window.location.origin
-      : 'https://tezocron.app';
-  return `${origin}/r/${handle}`;
+  return `${RELATE_LINK_BASE}/relate/${handle}`;
 }
 
 export function buildRelateShareMessage(displayName: string, link: string): string {
