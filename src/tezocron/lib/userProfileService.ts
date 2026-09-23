@@ -11,16 +11,15 @@ import {
   writeBatch 
 } from 'firebase/firestore';
 import { updateProfile } from 'firebase/auth';
-import { ref as storageRef, uploadString, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { db, auth, storage, handleFirestoreError, OperationType } from '../firebase';
+import { db, auth, handleFirestoreError, OperationType } from '../firebase';
 import { UserProfile, UserPrivacySettings } from '../types';
-import { prepareProfileImage } from './imageUtils';
+import { prepareProfileImageBase64 } from './imageUtils';
 
 /**
- * Optimises a gallery photo and stores it, returning its permanent secure URL.
- * Identical pictures are reused instead of being uploaded again.
+ * Prepares a gallery photo and saves it directly to the user's account
+ * so it appears immediately everywhere in the app.
  */
-export async function uploadProfilePictureToStorage(
+export async function saveProfilePictureFromFile(
   userId: string,
   file: File
 ): Promise<string> {
@@ -28,21 +27,35 @@ export async function uploadProfilePictureToStorage(
     throw new Error('Please choose a photo to use as your profile picture.');
   }
 
-  const { blob, contentType, hash } = await prepareProfileImage(file);
-  const pictureRef = storageRef(storage, `profile_pictures/${userId}/${hash}.jpg`);
+  const base64 = await prepareProfileImageBase64(file);
+  await saveProfilePicture(userId, base64);
+  return base64;
+}
 
-  // Reuse the exact same picture if it was already uploaded before
-  try {
-    return await getDownloadURL(pictureRef);
-  } catch {
-    // Not stored yet — continue with the upload
+/**
+ * Persists the picture (or its removal) to the user's profile record and,
+ * where possible, to their sign-in account details.
+ */
+export async function saveProfilePicture(
+  userId: string,
+  photoURL: string
+): Promise<void> {
+  await setDoc(
+    doc(db, 'users', userId),
+    { photoURL, updatedAt: new Date().toISOString() },
+    { merge: true }
+  );
+
+  if (auth.currentUser && auth.currentUser.uid === userId) {
+    try {
+      // Sign-in records only accept short links, so this is best effort
+      if (!photoURL || (!photoURL.startsWith('data:') && photoURL.length < 1800)) {
+        await updateProfile(auth.currentUser, { photoURL: photoURL || null });
+      }
+    } catch {
+      // Non-critical: the profile record is the source of truth
+    }
   }
-
-  const uploadTask = await uploadBytes(pictureRef, blob, {
-    contentType,
-    cacheControl: 'public, max-age=31536000, immutable',
-  });
-  return getDownloadURL(uploadTask.ref);
 }
 
 /**
