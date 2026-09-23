@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as RHandleRouteImport } from './routes/r.$handle'
+import { Route as RelateRelateIdRouteImport } from './routes/relate.$relateId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -22,31 +23,40 @@ const RHandleRoute = RHandleRouteImport.update({
   path: '/r/$handle',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RelateRelateIdRoute = RelateRelateIdRouteImport.update({
+  id: '/relate/$relateId',
+  path: '/relate/$relateId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/r/$handle': typeof RHandleRoute
+  '/relate/$relateId': typeof RelateRelateIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/r/$handle': typeof RHandleRoute
+  '/relate/$relateId': typeof RelateRelateIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/r/$handle': typeof RHandleRoute
+  '/relate/$relateId': typeof RelateRelateIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/r/$handle'
+  fullPaths: '/' | '/r/$handle' | '/relate/$relateId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/r/$handle'
-  id: '__root__' | '/' | '/r/$handle'
+  to: '/' | '/r/$handle' | '/relate/$relateId'
+  id: '__root__' | '/' | '/r/$handle' | '/relate/$relateId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   RHandleRoute: typeof RHandleRoute
+  RelateRelateIdRoute: typeof RelateRelateIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -65,12 +75,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RHandleRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/relate/$relateId': {
+      id: '/relate/$relateId'
+      path: '/relate/$relateId'
+      fullPath: '/relate/$relateId'
+      preLoaderRoute: typeof RelateRelateIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   RHandleRoute: RHandleRoute,
+  RelateRelateIdRoute: RelateRelateIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

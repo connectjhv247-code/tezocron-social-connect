@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link2, Copy, Check, Share2, Mail, MessageCircle, Loader2 } from 'lucide-react';
+import { Link2, Copy, Check, Share2, Mail, MessageCircle, Send, Smartphone, Loader2 } from 'lucide-react';
 import { ensureRelateHandle, buildRelateLink, buildRelateShareMessage } from '../lib/relateLinkService';
 
 interface RelateLinkCardProps {
@@ -135,6 +135,26 @@ export const RelateLinkCard: React.FC<RelateLinkCardProps> = ({ currentUserId, c
             >
               <MessageCircle className="w-3.5 h-3.5" />
               <span>WhatsApp</span>
+            </a>
+
+            <a
+              id="btn-share-relate-telegram"
+              href={`https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent(message)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-3.5 py-2 rounded-2xl bg-sky-600/10 text-sky-700 dark:text-sky-400 border border-sky-500/30 text-xs font-bold flex items-center gap-1.5 hover:bg-sky-600/20 transition cursor-pointer"
+            >
+              <Send className="w-3.5 h-3.5" />
+              <span>Telegram</span>
+            </a>
+
+            <a
+              id="btn-share-relate-sms"
+              href={`sms:?&body=${encodeURIComponent(message)}`}
+              className="px-3.5 py-2 rounded-2xl bg-violet-600/10 text-violet-700 dark:text-violet-400 border border-violet-500/30 text-xs font-bold flex items-center gap-1.5 hover:bg-violet-600/20 transition cursor-pointer"
+            >
+              <Smartphone className="w-3.5 h-3.5" />
+              <span>SMS</span>
             </a>
 
             <a
